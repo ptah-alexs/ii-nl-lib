@@ -123,7 +123,7 @@ func (r *NodesList) Add(sheme, url, name string) int{
 	inx := -1
 	for indx, v := range(*rr) {
 		if v.Url == requrl {
-			if v.Masked {
+			if v.Masked  && ! v.Exclude {
 				inx = indx
 			} else {return 1}
 		}
@@ -232,7 +232,6 @@ func CheckII(url string) bool{
 	if code != 200 { return false}
 	if len(answ) > 0 {
 		aa := strings.Split(answ[0], ":")
-		//code1, answ1 := _getre(fmt.Sprintf("%s/u/e/%s/-1:1", urlt, aa[0]))
 		code1, answ1 := Getre(fmt.Sprintf("%s/u/e/%s/", urlt, aa[0]), 511)
 		if code1 != 200 { return false}
 		if len(answ1) > 1 {
