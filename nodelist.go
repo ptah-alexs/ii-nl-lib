@@ -13,6 +13,7 @@ import (
 	"time"
 )
 
+
 type NodeT struct {
 	Url      string // ссылка на станцию (+)
 	Name     string // имя станции (+)
