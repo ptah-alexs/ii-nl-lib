@@ -232,17 +232,22 @@ func CheckII(url string) bool{
 	if code != 200 { return false}
 	if len(answ) > 0 {
 		aa := strings.Split(answ[0], ":")
-		nap := 3
+		nap := 4
+		scs := false
 		if jk := len(aa); jk < 3 {nap = jk}
 		for i := 0; i < nap; i++ {
 			code1, answ1 := Getre(fmt.Sprintf("%s/u/e/%s/", urlt, aa[i]), 511)
-			if code1 != 200 { return false}
+			if code1 != 200 { continue}
 			if len(answ1) > 1 {
 				code2, answ2 := Getre(fmt.Sprintf("%s/u/m/%s/", urlt, answ1[1]), 511)
-				if code2 != 200 { return false}
-				if len(answ2) == 0 { return false}
-			} else {return false}
+				if code2 != 200 { continue}
+				if len(answ2) == 0 { continue}
+			} else {continue}
+			if i < nap - 1 {
+				scs = true
+				break
+			}
 		}
+		return scs
 	} else {return false}
-	return true
 }
