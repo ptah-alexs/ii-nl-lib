@@ -13,7 +13,6 @@ import (
 	"time"
 )
 
-
 type NodeT struct {
 	Url      string // ссылка на станцию (+)
 	Name     string // имя станции (+)
@@ -30,7 +29,6 @@ type NodesList struct {
 	Path      string
 	Nodes     []NodeT
 }
-
 
 func NodeListNew(path string) *NodesList {
 	var nl NodesList
@@ -232,12 +230,12 @@ func CheckII(url string) bool{
 	code, answ := Getre(fmt.Sprintf("%s/list.txt", urlt), 511)
 	if code != 200 { return false}
 	if len(answ) > 0 {
-		aa := strings.Split(answ[0], ":")
 		nap := 4
 		scs := false
-		if jk := len(aa); jk < 3 {nap = jk}
+		if jk := len(answ); jk <= 3 {nap = jk}
 		for i := 0; i < nap; i++ {
-			code1, answ1 := Getre(fmt.Sprintf("%s/u/e/%s/", urlt, aa[i]), 511)
+			aa := strings.Split(answ[i], ":")
+			code1, answ1 := Getre(fmt.Sprintf("%s/u/e/%s/", urlt, aa[0]), 511)
 			if code1 != 200 { continue}
 			if len(answ1) > 1 {
 				code2, answ2 := Getre(fmt.Sprintf("%s/u/m/%s/", urlt, answ1[1]), 511)
