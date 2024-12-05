@@ -11,6 +11,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+	"math/rand"
 )
 
 type NodeT struct {
