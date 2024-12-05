@@ -243,6 +243,8 @@ func CheckII(url string) bool {
 		if code1 != 200 {return false}
 		mid := ""
 		switch la := len(answ1); {
+			case la == 1:
+				if strings.Contains(answ1[0], ".") {rc = true}
 			case la == 2:
 				if answ1[1] != "" {
 					mid = answ1[1]
