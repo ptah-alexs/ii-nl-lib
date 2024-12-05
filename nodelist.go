@@ -225,28 +225,43 @@ func Getre(url string, numb int64) (int, []string) {
 	return rc, vv
 }
 
-func CheckII(url string) bool{
+func CheckII(url string) bool {
 	urlt := strings.TrimSuffix(url, "/")
 	code, answ := Getre(fmt.Sprintf("%s/list.txt", urlt), 511)
-	if code != 200 { return false}
-	if len(answ) > 0 {
-		nap := 4
-		scs := false
-		if jk := len(answ); jk <= 3 {nap = jk}
-		for i := 0; i < nap; i++ {
-			aa := strings.Split(answ[i], ":")
-			code1, answ1 := Getre(fmt.Sprintf("%s/u/e/%s/", urlt, aa[0]), 511)
-			if code1 != 200 { continue}
-			if len(answ1) > 1 {
-				code2, answ2 := Getre(fmt.Sprintf("%s/u/m/%s/", urlt, answ1[1]), 511)
-				if code2 != 200 { continue}
-				if len(answ2) == 0 { continue}
-			} else {continue}
-			if i < nap - 1 {
-				scs = true
-				break
+	if code != 200 {return false}
+	rc := false
+	nap := 4
+	if jk:= len(answ); jk > 0 {
+		noe := ""
+		if jk < nap { nap = jk}
+		rn := rand.Intn(nap)
+		if  strings.Contains(answ[rn], ":") {
+			noe = strings.SplitN(answ[rn], ":", 2)[0]
+		}
+		code1, answ1 := Getre(fmt.Sprintf("%s/u/e/%s/", urlt, noe), 511)
+		if code1 != 200 {return false}
+		mid := ""
+		switch la := len(answ1); {
+			case la == 2:
+				if answ1[1] != "" {
+					mid = answ1[1]
+				} else	if strings.Contains(answ1[0], ".") {rc = true}
+			case la > 2:
+				for {
+					rnl := rand.Intn(la)
+					if !strings.Contains(answ1[rnl], ".") {
+						mid = answ1[rnl]
+						break
+					} else {continue}
+				}
+		}
+		if mid != "" {
+			code2, answ2 := Getre(fmt.Sprintf("%s/u/m/%s/", urlt, mid), 511)
+			if code2 != 200 {return false}
+			if len(answ2) > 0 {
+				if strings.HasPrefix(answ2[0], fmt.Sprintf("%s:", mid)) {rc = true}
 			}
 		}
-		return scs
+		return rc
 	} else {return false}
 }
