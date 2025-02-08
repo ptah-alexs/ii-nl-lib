@@ -161,7 +161,8 @@ func Parse(data string) NodeT {
 		et[idx] = val
 		if idx == 2 {break}
 	}
-	ns.Url = et[0]
+	//ns.Url = et[0]
+	if ! strings.HasSuffix(et[0], "/") {ns.Url = fmt.Sprintf("%s/", et[0])} else {ns.Url = et[0]}
 	ns.Name = et[1]
 	fmt.Sscan(et[2], &ns.LastEx)
 	return ns
@@ -243,8 +244,6 @@ func CheckII(url string) bool {
 		if code1 != 200 {return false}
 		mid := ""
 		switch la := len(answ1); {
-			case la == 1:
-				if strings.Contains(answ1[0], ".") {rc = true}
 			case la == 2:
 				if answ1[1] != "" {
 					mid = answ1[1]
