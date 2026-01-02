@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"os"
 	"strings"
@@ -41,6 +42,12 @@ func NodeListNew(path string) *NodesList {
 	nl.Nodes = *LoadNodes(path)
 	nl.UnlockF()
 	return &nl
+}
+
+var timeout = time.Duration(10 * time.Second)
+
+func dialTimeout(network, addr string) (net.Conn, error) {
+	return net.DialTimeout(network, addr, timeout)
 }
 
 func (r *NodesList) Write(path string) {
@@ -207,7 +214,13 @@ func OpenNL(path string) *NodesList {
 }
 
 func Getre(url string, numb int64) (int, []string) {
-	resp, err := http.Get(url)
+	transport := http.Transport{
+		Dial: dialTimeout,
+	}
+	client := http.Client{
+		Transport: &transport,
+	}
+	resp, err := client.Get(url)
 	if err != nil {
 		return -1, []string{}
 	}
